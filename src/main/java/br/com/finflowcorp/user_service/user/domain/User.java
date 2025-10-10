@@ -1,26 +1,23 @@
 package br.com.finflowcorp.user_service.user.domain;
 
-import br.com.finflowcorp.user_service.team.domain.Team;
+import br.com.finflowcorp.user_service.user.application.api.UserRequest;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-@ToString
 public class User {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "first_name", nullable = false)
@@ -35,13 +32,22 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @Column(columnDefinition = "uuid", name = "id_team", nullable = false)
+    private UUID idTeam;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    public User(UserRequest userRequest) {
+        this.firstName = userRequest.getFirstName();
+        this.lastName = userRequest.getLastName();
+        this.email = userRequest.getEmail();
+        this.role = userRequest.getRole();
+        this.idTeam = userRequest.getIdTeam();
+        this.createdAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
+    }
 }

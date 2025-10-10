@@ -1,29 +1,23 @@
 package br.com.finflowcorp.user_service.team.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "teams")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID idTeam;
 
     @Column(nullable = false, unique = true)
     private String name;
