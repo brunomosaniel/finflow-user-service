@@ -1,5 +1,6 @@
 package br.com.finflowcorp.user_service.user.domain;
 
+import br.com.finflowcorp.user_service.user.application.api.UserAlteracaoRequest;
 import br.com.finflowcorp.user_service.user.application.api.UserRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,4 +51,12 @@ public class User {
         this.createdAt = userRequest.getCreatedAt();
         this.updatedAt = userRequest.getUpdatedAt();
     }
+
+    public void altera(UserAlteracaoRequest userAlteracaoRequest) {
+        this.firstName = userAlteracaoRequest.getFirstName();
+        this.lastName = userAlteracaoRequest.getLastName();
+        this.email = userAlteracaoRequest.getEmail();
+        this.role = userAlteracaoRequest.getRole();
+    }
+
 }

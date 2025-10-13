@@ -1,10 +1,7 @@
 package br.com.finflowcorp.user_service.user.application.service;
 
 import br.com.finflowcorp.user_service.handler.APIException;
-import br.com.finflowcorp.user_service.user.application.api.UserDetalhadoResponse;
-import br.com.finflowcorp.user_service.user.application.api.UserListResponse;
-import br.com.finflowcorp.user_service.user.application.api.UserRequest;
-import br.com.finflowcorp.user_service.user.application.api.UserResponse;
+import br.com.finflowcorp.user_service.user.application.api.*;
 import br.com.finflowcorp.user_service.user.application.repository.UserRepository;
 import br.com.finflowcorp.user_service.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +45,24 @@ public class UserApplicationService implements UserService {
                 });
         log.info("[finish] UserApplicationService - buscaUserAtravesId");
         return new UserDetalhadoResponse(user);
+    }
+
+    @Override
+    public void deletaUserPorId(UUID id) {
+        log.info("[start] UserApplicationService - deletaUserPorId");
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND,
+                        "User não encontrado"));
+        userRepository.deleteById(id);
+        log.info("[finish] UserApplicationService - deletaUserPorId");
+    }
+
+    @Override
+    public void alteraUSer(UUID id, UserAlteracaoRequest userAlteracaoRequest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND,
+                        "User não encontrado"));
+        user.altera(userAlteracaoRequest);
+        userRepository.save(user);
     }
 }

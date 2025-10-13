@@ -33,4 +33,18 @@ public class UserController {
     UserDetalhadoResponse buscaUserAtravesId(@PathVariable UUID id) {
         return userService.buscaUserAtravesId(id);
     }
+
+    @DeleteMapping("deleta-por-id/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void deletaUser(@PathVariable UUID id) {
+        userService.deletaUserPorId(id);
+    }
+
+    @PatchMapping("/atualiza-produtos/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void atualizaUser(@PathVariable UUID id,
+                      @Valid @RequestBody UserAlteracaoRequest userAlteracaoRequest) {
+        userService.alteraUSer(id, userAlteracaoRequest);
+    }
+
 }
