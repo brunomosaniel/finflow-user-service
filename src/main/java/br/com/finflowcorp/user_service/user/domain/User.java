@@ -47,7 +47,7 @@ public class User {
         this.email = userRequest.getEmail();
         this.role = userRequest.getRole();
         this.idTeam = userRequest.getIdTeam();
-        this.createdAt = OffsetDateTime.now();
-        this.updatedAt = OffsetDateTime.now();
+        this.createdAt = userRequest.getCreatedAt();
+        this.updatedAt = userRequest.getUpdatedAt();
     }
 }
