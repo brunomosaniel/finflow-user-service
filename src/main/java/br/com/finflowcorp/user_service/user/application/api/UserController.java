@@ -17,34 +17,33 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
-    UserResponse createUser(@Valid @RequestBody UserRequest userRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse createUser(@Valid @RequestBody UserRequest userRequest) {
         return userService.createUser(userRequest);
     }
 
-    @GetMapping("/user")
-    @ResponseStatus(code = HttpStatus.OK)
-    List<UserListResponse> listAllUser() {
-        return userService.listaTodosUser();
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserListResponse> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/busca-atraves-id/{id}")
-    @ResponseStatus(code = HttpStatus.OK)
-    UserDetalhadoResponse buscaUserAtravesId(@PathVariable UUID id) {
-        return userService.buscaUserAtravesId(id);
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDetalhadoResponse getUserById(@PathVariable UUID id) {
+        return userService.getUserById(id);
     }
 
-    @DeleteMapping("deleta-por-id/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    void deletaUser(@PathVariable UUID id) {
-        userService.deletaUserPorId(id);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable UUID id) {
+        userService.deleteUserById(id);
     }
 
-    @PatchMapping("/atualiza-produtos/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    void atualizaUser(@PathVariable UUID id,
-                      @Valid @RequestBody UserAlteracaoRequest userAlteracaoRequest) {
-        userService.alteraUSer(id, userAlteracaoRequest);
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUser(@PathVariable UUID id,
+                           @Valid @RequestBody UserAlteracaoRequest userAlteracaoRequest) {
+        userService.updateUser(id, userAlteracaoRequest);
     }
-
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -33,12 +35,14 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @Column(columnDefinition = "uuid", name = "id_team", nullable = false)
+    @Column(name = "id_team", nullable = false)
     private UUID idTeam;
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
@@ -48,8 +52,6 @@ public class User {
         this.email = userRequest.getEmail();
         this.role = userRequest.getRole();
         this.idTeam = userRequest.getIdTeam();
-        this.createdAt = userRequest.getCreatedAt();
-        this.updatedAt = userRequest.getUpdatedAt();
     }
 
     public void altera(UserAlteracaoRequest userAlteracaoRequest) {
@@ -58,5 +60,4 @@ public class User {
         this.email = userAlteracaoRequest.getEmail();
         this.role = userAlteracaoRequest.getRole();
     }
-
 }

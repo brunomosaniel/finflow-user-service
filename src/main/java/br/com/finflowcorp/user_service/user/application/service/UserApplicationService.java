@@ -21,48 +21,57 @@ public class UserApplicationService implements UserService {
     @Override
     public UserResponse createUser(UserRequest userRequest) {
         log.info("[start] UserApplicationService - createUser");
+        if (userRepository.existsByEmail(userRequest.getEmail())) {
+            throw APIException.build(HttpStatus.CONFLICT, "Email already exists");
+        }
         User user = new User(userRequest);
-        User userCriado = userRepository.save(user);
+        User savedUser = userRepository.save(user);
         log.info("[finish] UserApplicationService - createUser");
-        return new UserResponse(userCriado);
+        return new UserResponse(savedUser);
     }
 
     @Override
-    public List<UserListResponse> listaTodosUser() {
-        log.info("[start] UserApplicationService - listaTodosUser");
+    public List<UserListResponse> getAllUsers() {
+        log.info("[start] UserApplicationService - getAllUsers");
         List<User> users = userRepository.findAll();
-        log.info("[finish] UserApplicationService - listaTodosUser");
+        log.info("[finish] UserApplicationService - getAllUsers");
         return UserListResponse.converte(users);
     }
 
     @Override
-    public UserDetalhadoResponse buscaUserAtravesId(UUID id) {
-        log.info("[start] UserApplicationService - buscaUserAtravesId");
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn("Usuário com ID {} não encontrado", id);
-                    return APIException.build(HttpStatus.NOT_FOUND, "User não encontrado");
-                });
-        log.info("[finish] UserApplicationService - buscaUserAtravesId");
+    public UserDetalhadoResponse getUserById(UUID id) {
+        log.info("[start] UserApplicationService - getUserById");
+        User user = findUserById(id);
+        log.info("[finish] UserApplicationService - getUserById");
         return new UserDetalhadoResponse(user);
     }
 
     @Override
-    public void deletaUserPorId(UUID id) {
-        log.info("[start] UserApplicationService - deletaUserPorId");
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND,
-                        "User não encontrado"));
+    public void deleteUserById(UUID id) {
+        log.info("[start] UserApplicationService - deleteUserById");
+        User user = findUserById(id);
         userRepository.deleteById(id);
-        log.info("[finish] UserApplicationService - deletaUserPorId");
+        log.info("[finish] UserApplicationService - deleteUserById");
     }
 
     @Override
-    public void alteraUSer(UUID id, UserAlteracaoRequest userAlteracaoRequest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND,
-                        "User não encontrado"));
+    public void updateUser(UUID id, UserAlteracaoRequest userAlteracaoRequest) {
+        log.info("[start] UserApplicationService - updateUser");
+        User user = findUserById(id);
+        if (!user.getEmail().equals(userAlteracaoRequest.getEmail()) &&
+                userRepository.existsByEmail(userAlteracaoRequest.getEmail())) {
+            throw APIException.build(HttpStatus.CONFLICT, "Email already exists");
+        }
         user.altera(userAlteracaoRequest);
         userRepository.save(user);
+        log.info("[finish] UserApplicationService - updateUser");
+    }
+
+    private User findUserById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("User with ID {} not found", id);
+                    return APIException.build(HttpStatus.NOT_FOUND, "User not found");
+                });
     }
 }

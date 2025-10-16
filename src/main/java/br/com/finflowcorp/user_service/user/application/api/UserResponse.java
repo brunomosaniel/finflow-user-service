@@ -9,7 +9,7 @@ import java.util.UUID;
 public class UserResponse {
     private UUID id;
 
-    public UserResponse(User userCriado) {
-        this.id = userCriado.getId();
+    public UserResponse(User savedUser) {
+        this.id = savedUser.getId();
     }
 }
