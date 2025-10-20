@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface TeamRepository extends JpaRepository<Team, UUID> {
     boolean existsByName(@NotBlank(message = "Nome do time é obrigatório") String name);
+    Team findTeamById(UUID id);
 }

@@ -1,5 +1,6 @@
 package br.com.finflowcorp.user_service.team.domain;
 
+import br.com.finflowcorp.user_service.team.application.api.TeamAlteracaoRequest;
 import br.com.finflowcorp.user_service.team.application.api.TeamRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,5 +41,10 @@ public class Team {
     public Team(TeamRequest teamRequest) {
         this.name = teamRequest.getName();
         this.description = teamRequest.getDescription();
+    }
+
+    public void altera(TeamAlteracaoRequest teamAlteracaoRequest) {
+        this.name = teamAlteracaoRequest.getName();
+        this.description = teamAlteracaoRequest.getDescription();
     }
 }
