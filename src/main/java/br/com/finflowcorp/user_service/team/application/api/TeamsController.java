@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/teams")
@@ -25,5 +26,23 @@ public class TeamsController {
     @ResponseStatus(code = HttpStatus.OK)
     public List<TeamListResponse> getAllTeams() {
         return teamService.getAllTeams();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public TeamDetalhadoResponse getTeamById(@PathVariable UUID id) {
+        return teamService.getTeamById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void deleteTeam(@PathVariable UUID id) {
+        teamService.deleteTeamById(id);
+    }
+    @PatchMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void updateTeam(@PathVariable UUID id,
+                    @Valid @RequestBody TeamAlteracaoRequest teamAlteracaoRequest) {
+        teamService.updateTeam(id, teamAlteracaoRequest);
     }
 }
